@@ -816,6 +816,128 @@
       .ticker-track { animation-duration: 42s; }
     }
 
+
+    /* ═══════════════════════════════════════════════════════
+       VÓRTEX PATCH FINAL — VÍDEO VISÍVEL NO MOBILE
+       Correção: usa um vídeo desktop e um vídeo mobile vertical.
+       Não depende do atributo media dentro de <source>, que pode falhar no Safari.
+    ═══════════════════════════════════════════════════════ */
+    .hero {
+      position: relative !important;
+      background: #050505 !important;
+      overflow: hidden !important;
+      isolation: isolate;
+    }
+
+    .hero-bg {
+      display: none !important;
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+
+    .hero-video {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      object-position: center center !important;
+      z-index: 0 !important;
+      opacity: 1 !important;
+      filter: saturate(1.14) contrast(1.16) brightness(1.18) !important;
+      transform: none !important;
+      pointer-events: none !important;
+      background: #050505 !important;
+    }
+
+    .hero-video-desktop {
+      display: block !important;
+    }
+
+    .hero-video-mobile {
+      display: none !important;
+    }
+
+    .hero-video-overlay {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(7,7,7,.86) 0%, rgba(7,7,7,.50) 48%, rgba(7,7,7,.76) 100%),
+        linear-gradient(180deg, rgba(7,7,7,.22) 0%, rgba(7,7,7,.54) 62%, rgba(7,7,7,.94) 100%);
+    }
+
+    .hero::after {
+      z-index: 2 !important;
+      pointer-events: none !important;
+    }
+
+    .hero-lines {
+      z-index: 2 !important;
+    }
+
+    .hero-content,
+    .hero-scroll {
+      position: relative !important;
+      z-index: 4 !important;
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        min-height: 100svh !important;
+      }
+
+      .hero-video-desktop {
+        display: none !important;
+      }
+
+      .hero-video-mobile {
+        display: block !important;
+        object-fit: cover !important;
+        object-position: center center !important;
+        opacity: 1 !important;
+        filter: saturate(1.18) contrast(1.22) brightness(1.36) !important;
+      }
+
+      .hero-video-overlay {
+        background:
+          linear-gradient(180deg, rgba(7,7,7,.38) 0%, rgba(7,7,7,.46) 42%, rgba(7,7,7,.88) 100%),
+          linear-gradient(90deg, rgba(7,7,7,.62), rgba(7,7,7,.18), rgba(7,7,7,.54));
+      }
+
+      .hero::after {
+        opacity: .28 !important;
+      }
+
+      .hero-title {
+        font-size: clamp(3.05rem, 14vw, 4.9rem) !important;
+        line-height: .96 !important;
+      }
+
+      .hero-sub {
+        font-size: 1.02rem !important;
+        line-height: 1.7 !important;
+        max-width: 94% !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .hero-video {
+        animation: none !important;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) and (min-width: 769px) {
+      .hero-video-desktop { display: block !important; }
+      .hero-video-mobile { display: none !important; }
+    }
+
+    @media (prefers-reduced-motion: reduce) and (max-width: 768px) {
+      .hero-video-desktop { display: none !important; }
+      .hero-video-mobile { display: block !important; }
+    }
+
   </style>
 </head>
 <body>
@@ -879,10 +1001,13 @@
 
   <!-- ══ HERO ══ -->
   <section class="hero" id="home">
-    <video class="hero-video" autoplay muted loop playsinline webkit-playsinline preload="metadata" poster="assets/hero-poster.jpg" aria-hidden="true">
-      <source media="(max-width: 768px)" src="assets/hero-cj-loop-mobile.mp4" type="video/mp4" />
+    <video class="hero-video hero-video-desktop" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="assets/hero-poster.jpg" aria-hidden="true">
       <source src="assets/hero-cj-loop.mp4" type="video/mp4" />
     </video>
+    <video class="hero-video hero-video-mobile" autoplay muted loop playsinline webkit-playsinline preload="auto" poster="assets/hero-poster.jpg" aria-hidden="true">
+      <source src="assets/hero-cj-loop-mobile.mp4" type="video/mp4" />
+    </video>
+    <div class="hero-video-overlay" aria-hidden="true"></div>
     <div class="hero-bg" id="heroBg"></div>
     <div class="hero-lines"></div>
     <div class="hero-content">
